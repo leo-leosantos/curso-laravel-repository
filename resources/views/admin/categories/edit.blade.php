@@ -3,6 +3,13 @@
 
 @section('content_header')
     <h1>Editar Categoria {{ $category->title }}</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="{{ route('admin') }}">Dashboard</a></li>
+        <li><a href="{{ route('categories.index') }}" class="active">Categorias</a></li>
+        <li><a href="{{ route('categories.edit', $category->id) }}" class="active">Editar</a></li>
+    </ol>
+
 @stop
 
 @section('content')

@@ -4,8 +4,14 @@
 @section('content_header')
     <h1>Detalhes da Categoria {{ $category->title }}</h1>
 
-    <a href="{{ route('categories.index') }}" class="btn btn-info btn-flat "> Voltar</a>
+    {{--  <a href="{{ route('categories.index') }}" class="btn btn-info btn-flat "> Voltar</a>  --}}
 
+
+    <ol class="breadcrumb">
+        <li><a href="{{ route('admin') }}">Dashboard</a></li>
+        <li><a href="{{ route('categories.index') }}" class="active">Categorias</a></li>
+        <li><a href="{{ route('categories.show', $category->id) }}" class="active">Detalhes</a></li>
+    </ol>
 @stop
 
 @section('content')
