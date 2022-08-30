@@ -133,9 +133,10 @@ return [
         [
             'text' => 'Categorias',
             'url'  => 'admin/categories',
+            'icon'=>'far fa-bookmark'
         ],
         [
-            'text'        => 'Produtos',
+            'text'        => 'Produtos ',
             'url'         => 'admin/products',
             'icon'        => 'far fa-file',
             'label_color' => 'success',
