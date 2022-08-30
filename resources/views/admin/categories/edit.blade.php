@@ -1,9 +1,8 @@
 @extends('adminlte::page')
-@section('title', 'Adicionar Categorias')
+@section('title', 'Editar Categorias')
 
 @section('content_header')
-    <h1>Nova Categoria</h1>
-
+    <h1>Editar Categoria {{ $category->title }}</h1>
 @stop
 
 @section('content')
@@ -11,7 +10,8 @@
         <div class="box box-success">
             <div class="box-body">
                 @include('admin.includes.alerts.alerts')
-              <form action="{{ route('categories.store') }}" class="form" method="POST">
+              <form action="{{ route('categories.update', $category->id) }}" class="form" method="POST">
+                    @method('PUT')
                     @include('admin.categories._partials.form')
               </form>
             </div>
