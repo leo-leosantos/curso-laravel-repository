@@ -33,7 +33,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::pluck('title', 'id');
         return view('admin.products.create', compact('categories'));
     }
 
@@ -54,7 +54,6 @@ class ProductController extends Controller
 
 
         return redirect()->route('products.index')->withSuccess('Produto cadastrado com sucesso!');
-
     }
 
     /**
@@ -65,7 +64,14 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = $this->product->with('category')->where('id', $id)->first();
+
+        //$categories = Category::pluck('title','id');
+        if (!$product) {
+            return redirect()->back();
+        }
+
+        return view('admin.products.show', compact('product'));
     }
 
     /**
@@ -76,7 +82,14 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = $this->product->find($id);
+        $categories = Category::pluck('title', 'id');
+
+        if (!$product) {
+            return redirect()->back();
+        }
+
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -86,9 +99,17 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreUpdateProductFormRequest $request, $id)
     {
-        //
+        $product = $this->product->find($id);
+
+        if (!$product) {
+            return redirect()->back();
+        }
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->withSuccess('Produto editado com sucesso!');
     }
 
     /**
@@ -99,6 +120,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = $this->product->find($id);
+
+        if (!$product) {
+            return redirect()->back();
+        }
+
+        $product->delete();
+        return redirect()->route('products.index')->withSuccess('Produto Excluido com sucesso!');
     }
 }

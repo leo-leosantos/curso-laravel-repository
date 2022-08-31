@@ -16,5 +16,5 @@
 </div>
 
 <div class="form-group">
-    <button type="submit" class="btn btn-warning btn-block btn-flat">Editar</button>
+    <button type="submit" class="btn btn-success btn-block btn-flat">Cadastrar</button>
 </div>

@@ -47,10 +47,8 @@
                                 <td>
                                     <a href="{{ route('products.edit', $product->id) }}"
                                         class="badge bg-yellow">Editar</a>
-
                                     <a href="{{ route('products.show', $product->id) }}"
                                         class="badge bg-blue">Visualizar</a>
-
                                 </td>
                             </tr>
                         @endforeach
