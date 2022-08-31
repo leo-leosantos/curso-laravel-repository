@@ -15,9 +15,27 @@
 
 @section('content')
     <div class="content-row">
-        <div class="box box-primary">
+        <div class="box box-success">
             <div class="box-body">
-                    formulario de pesquisa
+                    <form action="{{ route('products.search') }}" method="POST" class="form form-inline">
+                        @csrf
+                        <select name="category" class="form-control">
+                            <option value="">Categorias</option>
+                            @foreach ($categories as $id => $category )
+                            <option value="{{ $id }}" @if (isset($filters['category']) && $filters['category'] == $id)) selected
+
+                            @endif>
+                            {{ $category }}</option>
+
+                            @endforeach
+                        </select>
+                        <label for="filtro">Pesquisar</label>
+                        <input type="text" name="name" placeholder="Pesquisar pelo Nome" class="form-control" value="{{ $filters['name'] ?? '' }}">
+                        <input type="text" name="price" placeholder="Pesquisar pelo preço" class="form-control" value="{{ $filters['price'] ?? '' }}">
+
+                        <button type="submit" class="btn btn-success btn-flat">Buscar</button>
+                    </form>
+
             </div>
         </div>
         <div class="box box-success">
@@ -54,6 +72,11 @@
                         @endforeach
                     </tbody>
                 </table>
+                    @if (isset($filters))
+                        {!! $products->appends($filters)->links() !!}
+                    @else
+                        {!! $products->links() !!}
+                    @endif
             </div>
         </div>
     </div>

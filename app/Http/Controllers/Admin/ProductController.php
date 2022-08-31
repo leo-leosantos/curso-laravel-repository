@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products =  $this->product->with('category')->get();
+        $products =  $this->product->with('category')->paginate();
 
         return view('admin.products.index', compact('products'));
     }
@@ -33,8 +33,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::pluck('title', 'id');
-        return view('admin.products.create', compact('categories'));
+        // $categories = Category::pluck('title', 'id');
+        return view('admin.products.create');
     }
 
     /**
@@ -83,13 +83,13 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->product->find($id);
-        $categories = Category::pluck('title', 'id');
+        //$categories = Category::pluck('title', 'id');
 
         if (!$product) {
             return redirect()->back();
         }
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -128,5 +128,36 @@ class ProductController extends Controller
 
         $product->delete();
         return redirect()->route('products.index')->withSuccess('Produto Excluido com sucesso!');
+    }
+
+    public function search(Request $request)
+    {
+        $filters = $request->except('_token');
+
+
+        $data = $request->all();
+        $products = $this->product->with('category')
+            ->where(function ($query) use ($request) {
+                if ($request->name) {
+                    $filter = $request->name;
+                    $query->where(function ($querySub) use ($filter) {
+                        $querySub->where('name', 'LIKE', "%{$filter}%")
+                            ->orWhere('description', 'LIKE', "%{$filter}%");
+                    });
+                }
+                if ($request->price) {
+                    $query->where('price', $request->price);
+                }
+
+                if ($request->category) {
+                    $query->orWhere('category_id', $request->category);
+                }
+            })
+            ->paginate();
+
+        // dd($products);
+
+
+        return view('admin.products.index', compact('products','filters'));
     }
 }
