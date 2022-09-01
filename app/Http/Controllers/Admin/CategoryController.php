@@ -9,6 +9,7 @@ use App\Http\Requests\StoreUpdateCategoryFormRequest;
 
 class CategoryController extends Controller
 {
+    //queryBuilder
 
     public function index()
     {
