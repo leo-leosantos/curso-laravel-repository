@@ -11,6 +11,7 @@ use App\Repositories\Contracts\
 };
 use App\Repositories\Core\Eloquent\
 {
+    EloquentCategoryRepository,
     EloquentProductRepository,
 
 };
@@ -35,7 +36,8 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(
             CategoryRepositoryInterface::class,
-            QueryBuilderCategoryRepository::class
+            //QueryBuilderCategoryRepository::class
+            EloquentCategoryRepository::class
         );
 
     }

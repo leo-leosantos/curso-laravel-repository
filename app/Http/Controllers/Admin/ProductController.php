@@ -20,8 +20,10 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products =  $this->repository->paginate();
+        $products =  $this->repository->relationships('category')
+            ->paginate();
 
+            //dd($products);
         return view('admin.products.index', compact('products'));
     }
 
@@ -139,29 +141,10 @@ class ProductController extends Controller
         $filters = $request->except('_token');
 
 
-        $data = $request->all();
-        $products = $this->repository->with('category')
-            ->where(function ($query) use ($request) {
-                if ($request->name) {
-                    $filter = $request->name;
-                    $query->where(function ($querySub) use ($filter) {
-                        $querySub->where('name', 'LIKE', "%{$filter}%")
-                            ->orWhere('description', 'LIKE', "%{$filter}%");
-                    });
-                }
-                if ($request->price) {
-                    $query->where('price', $request->price);
-                }
+        // $data = $request->all();
 
-                if ($request->category) {
-                    $query->orWhere('category_id', $request->category);
-                }
-            })
-            ->paginate();
+        $products = $this->repository->search($request);
 
-        // dd($products);
-
-
-        return view('admin.products.index', compact('products','filters'));
+        return view('admin.products.index', compact('products', 'filters'));
     }
 }
