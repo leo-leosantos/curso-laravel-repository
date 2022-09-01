@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Core;
 
-use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Exceptions\NotEntityDefined;
+use App\Repositories\Contracts\RepositoryInterface;
 
 class BaseEloquentRepository implements RepositoryInterface
 {
     protected $entity;
 
-    public function __construct($entity)
+    public function __construct()
     {
         $this->entity = $this->resolveEntity();
     }

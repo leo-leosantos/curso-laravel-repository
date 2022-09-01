@@ -6,16 +6,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateCategoryFormRequest;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
     //queryBuilder
 
+    protected $repository;
+    public function __construct(CategoryRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
     public function index()
     {
-        $categories = DB::table('categories')
-            ->orderBy('id', 'desc')
-            ->paginate();
+        // $categories = DB::table('categories')
+        //     ->orderBy('id', 'desc')
+        //     ->paginate();
+
+        $categories  = $this->repository->paginate();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -29,21 +37,27 @@ class CategoryController extends Controller
     public function store(StoreUpdateCategoryFormRequest $request)
     {
 
-        DB::table('categories')->insert([
+        // DB::table('categories')->insert([
+        //     'title' => $request->title,
+        //     'url' => $request->url,
+        //     'description' => $request->description
+        // ]);
+
+
+        $this->repository->store([
             'title' => $request->title,
             'url' => $request->url,
             'description' => $request->description
         ]);
-
-
         return redirect()->route('categories.index')->withSuccess('Categoria Cadastrada com sucesso!');
     }
 
 
     public function show($id)
     {
-        $category = DB::table('categories')->where('id', $id)->first();
+        // $category = DB::table('categories')->where('id', $id)->first();
 
+        $category = $this->repository->findById($id);
         if (!$category) {
             return redirect()->back();
         }
@@ -54,7 +68,8 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = DB::table('categories')->where('id', $id)->first();
+        // $category = DB::table('categories')->where('id', $id)->first();
+        $category = $this->repository->findById($id);
 
         if (!$category) {
             return redirect()->back();
@@ -68,11 +83,20 @@ class CategoryController extends Controller
     public function update(StoreUpdateCategoryFormRequest $request, $id)
     {
 
-        DB::table('categories')->where('id', $id)->update([
-            'title' => $request->title,
-            'url' => $request->url,
-            'description' => $request->description
-        ]);
+        // DB::table('categories')->where('id', $id)->update([
+        //     'title' => $request->title,
+        //     'url' => $request->url,
+        //     'description' => $request->description
+        // ]);
+
+        $this->repository->update(
+            $id,
+            [
+                'title' => $request->title,
+                'url' => $request->url,
+                'description' => $request->description
+            ]
+        );
 
         return redirect()->route('categories.index');
     }
@@ -80,11 +104,13 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        $category = DB::table('categories')->where('id', $id)->delete();
+       // $category = DB::table('categories')->where('id', $id)->delete();
+       $category = $this->repository->delete($id);
+       if (!$category) {
+        return redirect()->back()->withErrors('Error ao excluir categoria!');
+    }
 
-        if (!$category) {
-            return redirect()->back()->withErrors('Error ao excluir categoria!');
-        }
+
 
 
         return redirect()->route('categories.index')->withSuccess('Categoria Excluida com sucesso!');

@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProductFormRequest;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 
 class ProductController extends Controller
 {
     //Eloquent ORM
 
-    protected $product;
+    protected $repository;
 
-    public function __construct(Product $product)
+    public function __construct(ProductRepositoryInterface $repository)
     {
-        $this->product = $product;
+        $this->repository = $repository;
     }
 
     public function index()
     {
-        $products =  $this->product->with('category')->paginate();
+        $products =  $this->repository->paginate();
 
         return view('admin.products.index', compact('products'));
     }
@@ -50,7 +49,7 @@ class ProductController extends Controller
         // $product = $category->products()->create($request->all());
 
         //outra maneira de cadastrar atraves do relacionamento
-        $product = $this->product->create($request->all());
+        $product = $this->repository->store($request->all());
 
 
         return redirect()->route('products.index')->withSuccess('Produto cadastrado com sucesso!');
@@ -64,7 +63,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = $this->product->with('category')->where('id', $id)->first();
+        //$product = $this->repository->where('id', $id)->first();
+        $product = $this->repository->findWhereFirst('id', $id);
 
         //$categories = Category::pluck('title','id');
         if (!$product) {
@@ -82,7 +82,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = $this->product->find($id);
+        $product = $this->repository->findById($id);
         //$categories = Category::pluck('title', 'id');
 
         if (!$product) {
@@ -101,14 +101,15 @@ class ProductController extends Controller
      */
     public function update(StoreUpdateProductFormRequest $request, $id)
     {
-        $product = $this->product->find($id);
+        // $product = $this->repository->find($id);
 
-        if (!$product) {
-            return redirect()->back();
-        }
+        // if (!$product) {
+        //     return redirect()->back();
+        // }
 
-        $product->update($request->all());
+        // $product->update($request->all());
 
+        $this->repository->update($id, $request->all());
         return redirect()->route('products.index')->withSuccess('Produto editado com sucesso!');
     }
 
@@ -120,13 +121,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = $this->product->find($id);
+        // $product = $this->repository->find($id);
 
-        if (!$product) {
-            return redirect()->back();
-        }
+        // if (!$product) {
+        //     return redirect()->back();
+        // }
 
-        $product->delete();
+        // $product->delete();
+
+        $this->repository->delete($id);
+
         return redirect()->route('products.index')->withSuccess('Produto Excluido com sucesso!');
     }
 
@@ -136,7 +140,7 @@ class ProductController extends Controller
 
 
         $data = $request->all();
-        $products = $this->product->with('category')
+        $products = $this->repository->with('category')
             ->where(function ($query) use ($request) {
                 if ($request->name) {
                     $filter = $request->name;
