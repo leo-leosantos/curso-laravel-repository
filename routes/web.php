@@ -1,23 +1,22 @@
 <?php
 
-
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-$this->any('admin/products/search', 'Admin\ProductController@search')->name('products.search');
 
-Route::get('admin', function(){
-})->name('admin');
 
-Route::any('admin/categories/search','Admin\CategoryController@search')->name('categories.search');
-Route::resource('admin/categories', 'Admin\CategoryController');
-Route::resource('admin/products', 'Admin\ProductController');
+$this->group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 
-Route::get('/', function () {
-    return view('welcome');
+    $this->any('products/search', 'ProductController@search')->name('products.search');
+    $this->any('categories/search', 'CategoryController@search')->name('categories.search');
+    $this->resource('categories', 'CategoryController');
+    $this->resource('products', 'ProductController');
+
+    $this->get('/', 'DashboardController@index')->name('admin');
 });
 
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Auth::routes(['register' => false]);
+
+Route::get('/', 'Site\\SiteController@index')->name('site.index');
+

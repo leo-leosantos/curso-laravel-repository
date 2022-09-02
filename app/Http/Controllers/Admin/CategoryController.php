@@ -23,7 +23,7 @@ class CategoryController extends Controller
         //     ->orderBy('id', 'desc')
         //     ->paginate();
 
-        $categories  = $this->repository->orderBy('id','DESC')->paginate();
+        $categories  = $this->repository->orderBy('id', 'DESC')->paginate();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -93,7 +93,7 @@ class CategoryController extends Controller
             $id,
             [
                 'title' => $request->title,
-               // 'url' => $request->url,
+                // 'url' => $request->url,
                 'description' => $request->description
             ]
         );
@@ -104,12 +104,21 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-       // $category = DB::table('categories')->where('id', $id)->delete();
-       $category = $this->repository->delete($id);
-       if (!$category) {
-        return redirect()->back()->withErrors('Error ao excluir categoria!');
-    }
+        // $category = DB::table('categories')->where('id', $id)->delete();
+        $category = $this->repository->findById($id);
 
+
+         $products = $this->repository->productsByCategoryID($id);
+
+        if ($products > 0) {
+            return redirect()->route('categories.index')->with('message','Error ao excluir categoria!');
+        }
+
+        if (!$category) {
+            return redirect()->back()->withErrors('Error ao excluir categoria!');
+        }
+
+        $category = $this->repository->delete($id);
 
 
 

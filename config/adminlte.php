@@ -131,14 +131,26 @@ return [
 
         ['header' => 'Menu Navegação'],
         [
-            'text' => 'Categorias',
+            'text'        => 'Dashboard ',
+            'url'         => 'admin',
+            'icon'        => 'fas fa-tachometer-alt',
+            'label_color' => 'success',
+        ],
+        [
+            'text' => 'Categorias ',
             'url'  => 'admin/categories',
-            'icon'=>'far fa-bookmark'
+            'icon'=>'fas fa-layer-group'
         ],
         [
             'text'        => 'Produtos ',
             'url'         => 'admin/products',
-            'icon'        => 'far fa-file',
+            'icon'        => 'fas fa-tasks',
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Usuários ',
+            'url'         => 'admin/users',
+            'icon'        => 'fas fa-users-cog',
             'label_color' => 'success',
         ],
 

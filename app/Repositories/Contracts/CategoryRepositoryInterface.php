@@ -7,4 +7,6 @@ interface CategoryRepositoryInterface
 {
 
     public function search( array $data);
+
+    public function productsByCategoryID($id);
 }
