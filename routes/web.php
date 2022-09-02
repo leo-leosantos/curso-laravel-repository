@@ -11,6 +11,7 @@ $this->group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
     $this->any('categories/search', 'CategoryController@search')->name('categories.search');
     $this->resource('categories', 'CategoryController');
     $this->resource('products', 'ProductController');
+    $this->resource('users', 'UserController');
 
     $this->get('/', 'DashboardController@index')->name('admin');
 });
