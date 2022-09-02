@@ -10,4 +10,23 @@ class QueryBuilderCategoryRepository extends BaseQueryBuilderRepository implemen
 
     protected $table = 'categories';
 
+    public function search(array $data)
+    {
+
+    }
+    public function store(array $data)
+    {
+        $data['url'] = kebab_case($data['title']);
+        return $this->db->table($this->tb)->insert($data);
+    }
+
+    public function update(int $id, array $data)
+    {
+        $data['url'] = kebab_case($data['title']);
+
+        return $this->db->table($this->tb)->where('id', $id)
+            ->update($data);
+    }
+
+
 }

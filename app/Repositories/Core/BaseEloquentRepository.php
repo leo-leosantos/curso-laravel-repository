@@ -61,4 +61,12 @@ class BaseEloquentRepository implements RepositoryInterface
         }
         return app($this->entity());
     }
+
+    public function orderBy($column, $order = 'DESC')
+    {
+        $this->entity = $this->entity->orderBy($column, $order);
+
+        return $this;
+    }
+
 }

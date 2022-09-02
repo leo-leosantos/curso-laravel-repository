@@ -23,7 +23,7 @@ class CategoryController extends Controller
         //     ->orderBy('id', 'desc')
         //     ->paginate();
 
-        $categories  = $this->repository->paginate();
+        $categories  = $this->repository->orderBy('id','DESC')->paginate();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -46,7 +46,7 @@ class CategoryController extends Controller
 
         $this->repository->store([
             'title' => $request->title,
-            'url' => $request->url,
+            //'url' => $request->url,
             'description' => $request->description
         ]);
         return redirect()->route('categories.index')->withSuccess('Categoria Cadastrada com sucesso!');
@@ -93,7 +93,7 @@ class CategoryController extends Controller
             $id,
             [
                 'title' => $request->title,
-                'url' => $request->url,
+               // 'url' => $request->url,
                 'description' => $request->description
             ]
         );
