@@ -17,7 +17,14 @@
     <div class="content-row">
         <div class="box box-success">
             <div class="box-body">
-                #formulario
+                <form action="{{ route('users.search') }}" method="POST" class="form form-inline">
+                    @csrf
+                    <label for="filtro">Pesquisar</label>
+                    <input type="text" name="filter" placeholder="Pesquisare" class="form-control"
+                        value="{{ $data['name'] ?? '' }}">
+
+                    <button type="submit" class="btn btn-success btn-flat">Buscar</button>
+                </form>
 
             </div>
         </div>
@@ -41,23 +48,21 @@
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{date_format($user->created_at, 'd-m-Y H:i:s')  }}</td>
+                                <td>{{ date_format($user->created_at, 'd-m-Y H:i:s') }}</td>
 
                                 <td>
-                                    <a href="{{ route('users.edit', $user->id) }}"
-                                        class="badge bg-yellow">Editar</a>
-                                    <a href="{{ route('users.show', $user->id) }}"
-                                        class="badge bg-blue">Visualizar</a>
+                                    <a href="{{ route('users.edit', $user->id) }}" class="badge bg-yellow">Editar</a>
+                                    <a href="{{ route('users.show', $user->id) }}" class="badge bg-blue">Visualizar</a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                    {{--  @if (isset($filters))
-                        {!! $products->appends($filters)->links() !!}
-                    @else
-                        {!! $products->links() !!}
-                    @endif  --}}
+                @if (isset($filters))
+                    {!! $users->appends($filters)->links() !!}
+                @else
+                    {!! $users->links() !!}
+                @endif
             </div>
         </div>
     </div>

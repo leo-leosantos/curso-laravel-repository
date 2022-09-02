@@ -23,13 +23,10 @@ class UserController extends Controller
      */
     public function index()
     {
-
-
-        $users = $this->repository->getAll();
+        $users = $this->repository->paginate();
 
         //dd($users);
         return view('admin.users.index', compact('users'));
-
     }
 
     /**
@@ -51,12 +48,19 @@ class UserController extends Controller
     public function store(StoreUpdateUserFormRequest $request)
     {
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        //pode fazer assim
+        // $data = [
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
 
-        ];
+        // ];
+
+        //ou assim
+
+        $data = $request->all();
+        $data['password'] =  Hash::make($request->password);
+
         $this->repository->store($data);
         return redirect()->route('users.index')->withSuccess('Usuário cadastrado com sucesso!');
     }
@@ -70,7 +74,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = $this->repository->findById($id);
-       // dd($user);
+        // dd($user);
         //$categories = Category::pluck('title','id');
         if (!$user) {
             return redirect()->back();
@@ -106,13 +110,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
 
-        ];
-        $this->repository->update($id,$data);
+
+        //pode fazer assim
+        // $data = [
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
+
+        // ];
+
+        //ou assim
+
+        $data = $request->all();
+        if ($request->password) {
+            $data['password'] =  Hash::make($request->password);
+        } else {
+            unset($data['password']);
+        }
+
+
+        $this->repository->update($id, $data);
         return redirect()->route('users.index')->withSuccess('Usuário editado com sucesso!');
     }
 
@@ -129,5 +147,18 @@ class UserController extends Controller
         $this->repository->delete($id);
 
         return redirect()->route('users.index')->withSuccess('Usuário Excluido com sucesso!');
+    }
+
+
+    public function search(Request $request)
+    {
+        $filters = $request->except('_token');
+
+
+        // $data = $request->all();
+
+        $users = $this->repository->search($request);
+
+        return view('admin.users.index', compact('users', 'filters'));
     }
 }

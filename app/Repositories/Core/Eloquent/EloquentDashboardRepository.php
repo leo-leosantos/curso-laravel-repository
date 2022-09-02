@@ -22,7 +22,7 @@ class  EloquentDashboardRepository implements DashboardRepositoryInterface
     }
     public function getAllUsers()
     {
-        return Product::count();
+        return User::count();
 
     }
 }
