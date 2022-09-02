@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProductFormRequest;
@@ -21,10 +22,10 @@ class ProductController extends Controller
     public function index()
     {
         $products =  $this->repository->relationships('category')
-                                      ->orderBy('id','DESC')
-                                      ->paginate();
+            ->orderBy('id', 'DESC')
+            ->paginate();
 
-            //dd($products);
+        //dd($products);
         return view('admin.products.index', compact('products'));
     }
 
@@ -47,14 +48,24 @@ class ProductController extends Controller
      */
     public function store(StoreUpdateProductFormRequest $request)
     {
-        //uma maneira  de cadastrar
-        // $category =  Category::find($request->category_id);
-        // $product = $category->products()->create($request->all());
 
-        //outra maneira de cadastrar atraves do relacionamento
-        $product = $this->repository->store($request->all());
+        $productUrl = $this->repository->urlSlug($request);
+
+        $name = $request->name;
+        $price = $request->price;
+        $category_id = $request->category_id;
+        $description = $request->description;
 
 
+        $data = [
+            'name' => $name,
+            'url' => $productUrl,
+            'price' => $price,
+            'category_id' => $category_id,
+            'description' => $description
+        ];
+
+        $this->repository->store($data);
         return redirect()->route('products.index')->withSuccess('Produto cadastrado com sucesso!');
     }
 
@@ -104,15 +115,23 @@ class ProductController extends Controller
      */
     public function update(StoreUpdateProductFormRequest $request, $id)
     {
-        // $product = $this->repository->find($id);
 
-        // if (!$product) {
-        //     return redirect()->back();
-        // }
 
-        // $product->update($request->all());
+        $name = $request->name;
+        $price = $request->price;
+        $category_id = $request->category_id;
+        $description = $request->description;
+        $productUrl = $this->repository->urlSlug($request);
 
-        $this->repository->update($id, $request->all());
+
+        $data = [
+            'name' => $name,
+            'url' => $productUrl,
+            'price' => $price,
+            'category_id' => $category_id,
+            'description' => $description
+        ];
+        $this->repository->update($id, $data);
         return redirect()->route('products.index')->withSuccess('Produto editado com sucesso!');
     }
 

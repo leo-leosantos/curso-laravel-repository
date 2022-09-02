@@ -7,15 +7,15 @@ use App\Repositories\Contracts\
 {
     ProductRepositoryInterface,
     CategoryRepositoryInterface,
-    ChartRepositoryInterface
-
+    ChartRepositoryInterface,
+    DashboardRepositoryInterface
 };
 use App\Repositories\Core\Eloquent\
 {
     EloquentCategoryRepository,
     EloquentProductRepository,
-    EloquentChartRepository
-
+    EloquentChartRepository,
+    EloquentDashboardRepository
 };
 use App\Repositories\Core\QueryBuilder\
 {
@@ -44,6 +44,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ChartRepositoryInterface::class,
             EloquentChartRepository::class
+        );
+        $this->app->bind(
+            DashboardRepositoryInterface::class,
+            EloquentDashboardRepository::class
         );
     }
 

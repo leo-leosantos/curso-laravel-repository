@@ -4,12 +4,12 @@
         <label for="name">Nome do Produto</label>
         {{ Form::text('name',null, ['placeholder'=>'Nome do Produto', 'class'=>'form-control']) }}
     </div>
-    <div class="form-group">
+    {{--  <div class="form-group">
         <label for="url">Url</label>
 
             {{ Form::text('url',null, ['placeholder'=>'Url do produto', 'class'=>'form-control']) }}
 
-    </div>
+    </div>  --}}
     <div class="form-group">
         <label for="price">Preço do Produto</label>
 

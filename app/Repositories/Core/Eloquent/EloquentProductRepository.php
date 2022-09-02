@@ -3,9 +3,10 @@
 namespace App\Repositories\Core\Eloquent;
 
 use App\Models\Product;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Repositories\Core\BaseEloquentRepository;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use Illuminate\Http\Request;
 
 class EloquentProductRepository extends BaseEloquentRepository implements ProductRepositoryInterface
 {
@@ -36,4 +37,13 @@ class EloquentProductRepository extends BaseEloquentRepository implements Produc
             })
             ->paginate();
     }
+
+    public function urlSlug(Request $request)
+    {
+
+        $slug = Str::slug($request->name );
+        return $slug;
+    }
+
+
 }

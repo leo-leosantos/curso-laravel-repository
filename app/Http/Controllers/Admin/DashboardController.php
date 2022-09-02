@@ -4,11 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\DashboardRepositoryInterface;
 
 class DashboardController extends Controller
 {
-    public function index()
+    protected $repository;
+
+    public function index(DashboardRepositoryInterface $repository)
     {
-        return  view('admin.dashboard.index');
+
+        $categories =     $repository->getAllCategories();
+        $products =   $repository->getAllProducts();
+        $users =  $repository->getAllUsers();
+
+        return  view('admin.dashboard.index'  ,[
+            'categories' => $categories,
+            'products' => $products,
+            'users' => $users,
+        ]);
     }
 }

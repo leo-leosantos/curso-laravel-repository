@@ -35,6 +35,7 @@ class BaseEloquentRepository implements RepositoryInterface
     }
     public function store(array $data)
     {
+        //dd($data);
         return $this->entity->create($data);
     }
     public function update(int $id, array $data)

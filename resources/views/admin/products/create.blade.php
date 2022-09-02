@@ -14,11 +14,7 @@
 
 @section('content')
     <div class="content-row">
-        <div class="box box-primary">
-            <div class="box-body">
-                formulario de pesquisa
-            </div>
-        </div>
+
         <div class="box box-primary">
             <div class="box-body">
                 @include('admin.includes.alerts.alerts')
